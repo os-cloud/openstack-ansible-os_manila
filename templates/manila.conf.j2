@@ -37,14 +37,14 @@ storage_availability_zone = {{ manila_storage_availability_zone }}
 client_socket_timeout = {{ manila_client_socket_timeout }}
 
 {% if manila_enabled_share_protocols is defined %}
-enabled_share_protocols={{ manila_enabled_share_protocols }}
+enabled_share_protocols={{ manila_enabled_share_protocols | join(',') }}
 {% endif %}
 
 {% if manila_backends is defined %}
-enabled_share_backends={% for backend in manila_backends|dictsort %}{{ backend.0 }}{% if not loop.last %},{% endif %}{% endfor %}
+enabled_share_backends={% for backend in manila_backends | dictsort %}{{ backend.0 }}{% if not loop.last %},{% endif %}{% endfor %}
 
 # All given backend(s)
-{% for backend_section in manila_backends|dictsort %}
+{% for backend_section in manila_backends | dictsort %}
 [{{ backend_section.0 }}]
 {% for key, value in (backend_section.1 | dictsort) if key not in ['extra_share_types', 'shares'] %}
 {{ key }}={{ value }}

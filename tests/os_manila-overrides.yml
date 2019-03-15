@@ -17,6 +17,7 @@ tempest_run: yes
 tempest_test_whitelist:
   - smoke
   - manila_tempest_tests.tests.scenario.test_share_basic_ops
+
 tempest_test_blacklist:
   - test: tempest.api.identity
     reason: Reducing run time and required resources
@@ -32,7 +33,7 @@ tempest_test_blacklist:
     reason: Reducing run time and required resources
   - test: tempest.scenario.test_network_basic_ops
     reason: Reducing run time and required resources
-tempest_service_available_manila: True
+
 tempest_plugins: "{{ _tempest_plugins['keystone'] + _tempest_plugins['manila'] }}"
 
 tempest_tempest_conf_overrides:
@@ -108,7 +109,7 @@ manila_container_mysql_password: "SuperSecrete"
 manila_developer_mode: true
 manila_git_install_branch: "{{ test_branch }}"
 manila_profiler_hmac_key: "secrete"
-manila_oslomsg_rpc_password: "{{ oslomsg_rpc_password }}"
+manila_oslomsg_rpc_password: "secrete"
 manila_oslomsg_notify_password: "{{ oslomsg_notify_password }}"
 manila_service_password: "secrete"
 manila_venv_tag: "testing"

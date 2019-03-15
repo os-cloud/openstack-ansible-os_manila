@@ -22,12 +22,13 @@
 - name: Apply uWSGI configuration
   config_template:
     src: "manila-uwsgi.ini.j2"
-    dest: "/etc/uwsgi/{{ item.service_name }}.ini"
+    dest: "/etc/uwsgi/{{ item.wsgi_name }}.ini"
     mode: "0744"
     config_overrides: "{{ item.wsgi_overrides }}"
     config_type: ini
   with_items: "{{ filtered_manila_services }}"
-  when: item.wsgi_app | default(False)
+  when:
+    - item.wsgi_app | default(False)
   notify:
     - Manage LB
     - Restart manila services

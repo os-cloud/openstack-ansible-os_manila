@@ -42,7 +42,7 @@
 
 - include: manila_lvm_config.yml
   when:
-    - "manila_services['manila-share']['group'] in group_names"
+    - "manila_services['manila_share']['group'] in group_names"
     - "manila_backend_lvm_inuse | bool"
   tags:
     - manila-config
@@ -73,9 +73,9 @@
     - manila-config
 
 - import_tasks: mq_setup.yml
+  run_once: true
   when:
-    - "manila_services['manila-api']['group'] in group_names"
-    - "inventory_hostname == ((groups[manila_services['manila-api']['group']]| intersect(ansible_play_hosts)) | list)[0]"
+    - "manila_services['manila_api']['group'] in group_names"
   vars:
     _oslomsg_rpc_setup_host: "{{ manila_oslomsg_rpc_setup_host }}"
     _oslomsg_rpc_userid: "{{ manila_oslomsg_rpc_userid }}"
@@ -95,7 +95,7 @@
   static: no
   when:
     - "groups['manila_api'] | length > 0"
-    - "manila_services['manila-api']['group'] in group_names"
+    - "manila_services['manila_api']['group'] in group_names"
     - "inventory_hostname == ((groups['manila_api'] | intersect(ansible_play_hosts)) | list)[0]"
   tags:
     - manila-config
@@ -108,7 +108,7 @@
   static: no
   when:
     - "groups['manila_api'] | length > 0"
-    - "manila_services['manila-api']['group'] in group_names"
+    - "manila_services['manila_api']['group'] in group_names"
     - "inventory_hostname == ((groups['manila_api'] | intersect(ansible_play_hosts)) | list)[0]"
   tags:
     - manila-config
@@ -118,9 +118,9 @@
     name: ceph_client
   vars:
     openstack_service_system_user: "{{ manila_system_user_name }}"
-    openstack_service_venv_bin: "{{ (manila_install_method == 'source') | ternary(manila_bin,'/usr/local/bin') }}"
+    openstack_service_venv_bin: "{{ manila_bin }}"
   when:
-    - "manila_services['manila-share']['group'] in group_names"
+    - "manila_services['manila_share']['group'] in group_names"
     - "manila_backend_rbd_inuse | bool"
   tags:
     - ceph
@@ -131,8 +131,8 @@
 - include: manila_backends.yml
   static: no
   when:
-    - "groups[manila_services['manila-share']['group']] | length > 0"
-    - "manila_services['manila-api']['group'] in group_names"
-    - "inventory_hostname == ((groups[manila_services['manila-api']['group']] | intersect(ansible_play_hosts)) | list)[-1]"
+    - "groups[manila_services['manila_share']['group']] | length > 0"
+    - "manila_services['manila_api']['group'] in group_names"
+    - "inventory_hostname == ((groups[manila_services['manila_api']['group']] | intersect(ansible_play_hosts)) | list)[-1]"
   tags:
     - manila-config

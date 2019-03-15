@@ -202,7 +202,7 @@ manila_quota_share_networks: 10
 #     share_backend_name: LVM
 #     share_driver: manila.share.drivers.lvm.LVMShareDriver
 #     driver_handles_share_servers: False
-#     lvm_share_volume_group: manila-shares
+#     lvm_share_volume_group: manila_shares
 #     lvm_share_export_ip: <server-ip>
 
 # manila_backend_lvm_inuse: True if current host has an lvm backend
@@ -244,21 +244,21 @@ manila_data_init_overrides: {}
 
 ## Service Name-Group Mapping
 manila_services:
-  manila-scheduler:
+  manila_scheduler:
     group: manila_scheduler
     service_name: manila-scheduler
     init_config_overrides: "{{ manila_scheduler_init_overrides }}"
     start_order: 1
     execstarts: "{{ manila_bin }}/manila-scheduler"
     execreloads: "/bin/kill -HUP $MAINPID"
-  manila-share:
+  manila_share:
     group: manila_share
     service_name: manila-share
     init_config_overrides: "{{ manila_share_init_overrides }}"
     start_order: 2
     execstarts: "{{ manila_bin }}/manila-share"
     execreloads: "/bin/kill -HUP $MAINPID"
-  manila-data:
+  manila_data:
     group: manila_data
     service_name: manila-data
     init_config_overrides: "{{ manila_data_init_overrides }}"
@@ -266,13 +266,13 @@ manila_services:
     condition: False
     execstarts: "{{ manila_bin }}/manila-data"
     execreloads: "/bin/kill -HUP $MAINPID"
-  manila-api:
+  manila_api:
     group: manila_api
     service_name: manila-api
     init_config_overrides: "{{ manila_api_init_overrides }}"
     start_order: 4
-    execstarts: "{{ manila_uwsgi_bin }}/uwsgi --autoload --ini /etc/uwsgi/manila-api.ini"
-    execreloads: "{{ manila_uwsgi_bin }}/uwsgi --reload /var/run/manila-api/manila-api.pid"
+    execstarts: "{{ manila_uwsgi_bin }}/uwsgi --autoload --ini /etc/uwsgi/manila_api.ini"
+    execreloads: "{{ manila_uwsgi_bin }}/uwsgi --reload /var/run/manila_api/manila_api.pid"
     wsgi_overrides: "{{ manila_api_uwsgi_ini_overrides }}"
     wsgi_app: True
     wsgi_name: manila-wsgi
